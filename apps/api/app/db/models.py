@@ -4,7 +4,7 @@ from datetime import datetime
 from enum import StrEnum
 from uuid import UUID, uuid4
 
-from sqlalchemy import DateTime, ForeignKey, Index, JSON, String, Text, UniqueConstraint, func
+from sqlalchemy import JSON, DateTime, ForeignKey, Index, String, Text, UniqueConstraint, func
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -31,7 +31,9 @@ class WebhookEventStatus(StrEnum):
 
 class WebhookEvent(Base):
     __tablename__ = "webhook_events"
-    __table_args__ = (UniqueConstraint("merchant_id", "event_id", name="uq_webhook_merchant_event"),)
+    __table_args__ = (
+        UniqueConstraint("merchant_id", "event_id", name="uq_webhook_merchant_event"),
+    )
 
     id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
     merchant_id: Mapped[UUID] = mapped_column(ForeignKey("merchants.id", ondelete="CASCADE"))
@@ -39,7 +41,9 @@ class WebhookEvent(Base):
     event_type: Mapped[str] = mapped_column(String(200))
     status: Mapped[WebhookEventStatus] = mapped_column(default=WebhookEventStatus.RECEIVED)
     payload: Mapped[dict[str, object]] = mapped_column(JSON, default=dict)
-    received_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    received_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
     processed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
