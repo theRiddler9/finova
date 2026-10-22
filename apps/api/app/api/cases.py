@@ -3,9 +3,10 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.contracts.cases import CaseRead, CaseStatus, EvidenceBundle
+from app.contracts.cases import CaseRead, CaseStatus, CaseTransitionRequest, EvidenceBundle
 from app.core.auth import get_current_merchant_id
 from app.db.base import get_db_session
+from app.services.case_lifecycle import CaseNotFoundError, transition_case_status
 from app.services.cases import get_case, list_cases
 from app.services.evidence import EvidenceCaseNotFoundError, list_evidence
 
@@ -42,4 +43,23 @@ async def read_case_evidence(
     try:
         return await list_evidence(session, merchant_id, case_id)
     except EvidenceCaseNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Case not found") from exc
+
+
+@router.post("/{case_id}/transition", response_model=CaseRead)
+async def transition_case(
+    case_id: UUID,
+    request: CaseTransitionRequest,
+    merchant_id: UUID = Depends(get_current_merchant_id),
+    session: AsyncSession = Depends(get_db_session),
+) -> CaseRead:
+    try:
+        return await transition_case_status(
+            session,
+            merchant_id,
+            case_id,
+            request.target,
+            approved=request.approved,
+        )
+    except CaseNotFoundError as exc:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Case not found") from exc

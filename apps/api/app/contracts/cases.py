@@ -62,6 +62,13 @@ class CaseRead(CaseCreate):
     updated_at: datetime
 
 
+class CaseTransitionRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    target: CaseStatus
+    approved: bool = False
+
+
 class WebhookEvent(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
