@@ -9,6 +9,7 @@ from sqlalchemy import select
 from app.core.config import get_settings
 from app.db.base import session_factory
 from app.db.models import WebhookEvent, WebhookEventStatus
+from app.pipeline.case_creation import ensure_case_for_event
 
 logger = structlog.get_logger(__name__)
 settings = get_settings()
@@ -33,6 +34,7 @@ async def process_webhook(ctx: dict[str, object], event_id: str) -> None:
             event_id=event.event_id,
             event_type=event.event_type,
         )
+        await ensure_case_for_event(session, event)
         event.status = WebhookEventStatus.PROCESSED
         await session.commit()
 
