@@ -54,6 +54,8 @@ class CaseCreate(BaseModel):
 
 
 class CaseRead(CaseCreate):
+    model_config = ConfigDict(from_attributes=True, extra="forbid")
+
     id: UUID
     status: CaseStatus
     created_at: datetime
