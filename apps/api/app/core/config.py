@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     llm_api_key: str = ""
     llm_model: str = ""
     vision_model: str = ""
+    auth_jwt_secret: str = ""
 
 
 @lru_cache
