@@ -1,4 +1,5 @@
 from functools import lru_cache
+from pathlib import Path
 from uuid import UUID
 
 from pydantic import Field
@@ -9,7 +10,7 @@ class Settings(BaseSettings):
     """Environment-backed settings shared by API and workers."""
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=Path(__file__).resolve().parents[4] / ".env",
         env_file_encoding="utf-8",
         extra="ignore",
     )
