@@ -209,6 +209,7 @@ docker compose up -d
 cd apps/api
 pip install -e ".[dev]"
 alembic upgrade head
+python -m scripts.seed_demo_data
 uvicorn app.main:app --reload
 ```
 
@@ -234,6 +235,13 @@ ngrok http 8000
 ```
 
 Register the generated HTTPS URL as a webhook endpoint in your PayPal sandbox app, subscribing to `CUSTOMER.DISPUTE.CREATED`, `CUSTOMER.DISPUTE.UPDATED` and `CUSTOMER.DISPUTE.RESOLVED`.
+
+### Synthetic demo data
+
+After applying migrations, `python -m scripts.seed_demo_data` inserts deterministic,
+idempotent local data for one demo merchant: two disputes, webhook events, Shopify,
+Shippo, Zendesk and Vision evidence, and response deadlines. The records contain no
+real customer or merchant information and are intended only for local development.
 
 ---
 
