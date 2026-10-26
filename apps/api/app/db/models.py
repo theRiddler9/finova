@@ -4,7 +4,19 @@ from datetime import datetime
 from enum import StrEnum
 from uuid import UUID, uuid4
 
-from sqlalchemy import JSON, DateTime, ForeignKey, Index, String, Text, UniqueConstraint, func
+from sqlalchemy import (
+    JSON,
+    DateTime,
+    ForeignKey,
+    Index,
+    String,
+    Text,
+    UniqueConstraint,
+    func,
+)
+from sqlalchemy import (
+    Enum as SAEnum,
+)
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -75,7 +87,9 @@ class EvidenceItem(Base):
 
     id: Mapped[UUID] = mapped_column(PGUUID(as_uuid=True), primary_key=True, default=uuid4)
     case_id: Mapped[UUID] = mapped_column(ForeignKey("cases.id", ondelete="CASCADE"))
-    source: Mapped[EvidenceSource] = mapped_column(String(32))
+    source: Mapped[EvidenceSource] = mapped_column(
+        SAEnum(EvidenceSource, name="evidencesource", native_enum=True, create_type=False)
+    )
     kind: Mapped[str] = mapped_column(String(100))
     occurred_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     summary: Mapped[str] = mapped_column(Text)
