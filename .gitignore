@@ -1,0 +1,28 @@
+# Local secrets and environment overrides
+.env
+.env.*
+!.env.example
+
+# Python caches and local tooling output
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# Local environments and build output
+.venv/
+venv/
+dist/
+build/
+
+# Node tooling output
+node_modules/
+.next/
+
+# IDE and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
