@@ -150,6 +150,9 @@ Ensure the following are available before running Finova:
 9. **Supabase Project:** For database, storage and authentication.
 10. **ngrok (or equivalent):** To expose local webhooks to the PayPal sandbox.
 
+If another PostgreSQL service is already using port 5432, Finova's Docker
+PostgreSQL is exposed on host port 5433 by default.
+
 ---
 
 ## Quick Start
