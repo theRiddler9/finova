@@ -8,4 +8,4 @@ async def test_case_routes_fail_closed_without_auth_configuration() -> None:
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         response = await client.get("/v1/cases")
 
-    assert response.status_code == 503
+    assert response.status_code == 401

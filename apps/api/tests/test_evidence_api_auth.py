@@ -8,4 +8,4 @@ async def test_evidence_route_requires_authentication() -> None:
     async with AsyncClient(transport=transport, base_url="http://test") as client:
         response = await client.get("/v1/cases/00000000-0000-0000-0000-000000000000/evidence")
 
-    assert response.status_code == 503
+    assert response.status_code == 401

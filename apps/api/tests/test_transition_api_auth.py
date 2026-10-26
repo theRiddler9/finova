@@ -11,4 +11,4 @@ async def test_transition_route_requires_authentication() -> None:
             json={"target": "SUBMITTED", "approved": True},
         )
 
-    assert response.status_code == 503
+    assert response.status_code == 401
