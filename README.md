@@ -150,6 +150,9 @@ Ensure the following are available before running Finova:
 9. **Supabase Project:** For database, storage and authentication.
 10. **ngrok (or equivalent):** To expose local webhooks to the PayPal sandbox.
 
+If another PostgreSQL service is already using port 5432, Finova's Docker
+PostgreSQL is exposed on host port 5433 by default.
+
 ---
 
 ## Quick Start
@@ -209,6 +212,7 @@ docker compose up -d
 cd apps/api
 pip install -e ".[dev]"
 alembic upgrade head
+python -m scripts.seed_demo_data
 uvicorn app.main:app --reload
 ```
 
@@ -234,6 +238,13 @@ ngrok http 8000
 ```
 
 Register the generated HTTPS URL as a webhook endpoint in your PayPal sandbox app, subscribing to `CUSTOMER.DISPUTE.CREATED`, `CUSTOMER.DISPUTE.UPDATED` and `CUSTOMER.DISPUTE.RESOLVED`.
+
+### Synthetic demo data
+
+After applying migrations, `python -m scripts.seed_demo_data` inserts deterministic,
+idempotent local data for one demo merchant: two disputes, webhook events, Shopify,
+Shippo, Zendesk and Vision evidence, and response deadlines. The records contain no
+real customer or merchant information and are intended only for local development.
 
 ---
 
