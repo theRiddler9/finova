@@ -6,8 +6,7 @@ from app.domain.approval import ApprovalRequiredError, approve_for_submission
 
 def test_approval_allows_review_ready_submission() -> None:
     assert (
-        approve_for_submission(CaseStatus.READY_FOR_REVIEW, approved=True)
-        is CaseStatus.SUBMITTED
+        approve_for_submission(CaseStatus.READY_FOR_REVIEW, approved=True) is CaseStatus.SUBMITTED
     )
 
 

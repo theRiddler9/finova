@@ -23,9 +23,7 @@ async def transition_case_status(
 ) -> CaseRead:
     """Transition one merchant's case under a row lock."""
     case = await session.scalar(
-        select(Case)
-        .where(Case.id == case_id, Case.merchant_id == merchant_id)
-        .with_for_update()
+        select(Case).where(Case.id == case_id, Case.merchant_id == merchant_id).with_for_update()
     )
     if case is None:
         raise CaseNotFoundError("Case was not found for this merchant")
